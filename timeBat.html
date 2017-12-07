@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+
+<body>
+	<div id="mydiv">
+		
+	</div>
+	<button id='pre'>上一个</button>
+	<button id='next'>下一个</button>
+
+</body>
+<script type="text/javascript">
+	
+
+	var TimeBar = {
+		config:{
+			domId:'mydiv',
+			index:3,
+			max:5,
+
+			itemClick:function(value){alert(value)},
+			preOneCallBck:function(c,n){
+				//alert(c+" -- "+n)
+			},
+			nextOneCallBck:function(c,n){
+				//alert(c+" -- "+n)
+			}
+
+		},
+		api:{
+			itemClick:function(event){
+
+
+				var t = event.target ;
+				// 找当前坐标
+
+				var val = t.getAttribute('value');
+				this.config.itemClick(val);
+				this.config.itemClick()
+			}
+		},
+		preOne:function(){
+				var t = this.data[this.config.index];
+				this.config.index-- ; 
+				var n = this.data[this.config.index];
+				this.config.preOneCallBck(t,n);
+				this.render();
+			},
+			nextOne:function(){
+				var t = this.data[this.config.index];
+				this.config.index++ ; 
+				var n = this.data[this.config.index];
+				this.config.nextOneCallBck(t,n);
+				this.render();
+			},
+		data:['1','2','3','4','5','6','7','8','9','10'],
+		render:function(){
+			var waper = document.getElementById(this.config.domId);
+			var ul = document.createElement('ul');
+			for(var i= this.config.index;i<this.config.index+this.config.max;i++){
+				var temp = null ;
+				if(this.data.length > i){
+					temp = this.data[i]
+				}else{
+					break ;
+				}
+
+				
+				var li = document.createElement('li');
+				li.setAttribute('value',temp)
+				li.innerHTML=temp+'';
+
+				li.addEventListener('click',function(event){
+					this.api.itemClick(event);
+				}.bind(this))
+				ul.appendChild(li);
+			}
+			waper.innerHTML='';
+			waper.appendChild(ul);
+		},
+		init:function(config){
+			this.config = Object.assign(this.config,config);
+			this.render();
+		}
+
+	}
+
+
+	TimeBar.init();
+
+	var btnPre = document.getElementById('pre');
+
+	btnPre.addEventListener('click',function(){
+		TimeBar.preOne()
+	})
+
+	var nextPre = document.getElementById('next');
+	nextPre.addEventListener('click',function(){
+		TimeBar.nextOne()
+	})
+
+</script>
+</html>
